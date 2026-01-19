@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vigil LLC - Elite Investment Performance</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            background: #000;
+            color: #fff;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 40px;
+        }
+
+        header {
+            padding: 60px 0 40px;
+            text-align: center;
+            background: #000;
+            position: relative;
+        }
+
+        .logo-container {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 25px;
+        }
+
+        .logo-glow {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            background: #FFD700;
+            filter: blur(40px);
+            opacity: 0.4;
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.4; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(1.05); }
+        }
+
+        .logo-border {
+            position: relative;
+            padding: 3px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #FFD700 0%, #B8860B 100%);
+            box-shadow: 0 20px 60px rgba(255, 215, 0, 0.4);
+        }
+
+        .logo-inner {
+            background: #000;
+            border-radius: 50%;
+            padding: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-v {
+            font-size: 3rem;
+            font-weight: bold;
+            font-family: Georgia, serif;
+            color: #FFD700;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+        }
+
+        .logo-text {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #FFD700;
+            margin-bottom: 8px;
+            letter-spacing: 8px;
+        }
+
+        .tagline {
+            font-size: 1.1rem;
+            color: #999;
+            font-weight: 300;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .hero {
+            padding: 80px 0 60px;
+            text-align: center;
+            background: #000;
+            position: relative;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #FFD700, transparent);
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 25px;
+            color: #fff;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .hero .highlight {
+            color: #FFD700;
+        }
+
+        .hero p {
+            font-size: 1.35rem;
+            max-width: 900px;
+            margin: 0 auto 50px;
+            color: #aaa;
+            line-height: 1.7;
+        }
+
+        .limited-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+            color: #fff;
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 5px 20px rgba(220, 38, 38, 0.4);
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 5px 20px rgba(220, 38, 38, 0.4); }
+            50% { box-shadow: 0 5px 30px rgba(220, 38, 38, 0.7); }
+        }
+
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+            margin: 60px 0;
+            max-width: 1100px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 35px 25px;
+            background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
+            border-radius: 15px;
+            border: 2px solid #FFD700;
+            box-shadow: 0 10px 40px rgba(255, 215, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 50px rgba(255, 215, 0, 0.35);
+        }
+
+        .stat-number {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: #FFD700;
+            margin-bottom: 10px;
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 1.1rem;
+            color: #888;
+            font-weight: 400;
+        }
+
+        .comparison-section {
+            padding: 80px 0;
+            background: #000;
+        }
+
+        .section-title {
+            font-size: 2.8rem;
+            color: #FFD700;
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            font-size: 1.2rem;
+            color: #888;
+            margin-bottom: 60px;
+        }
+
+        .chart-container {
+            background: #0a0a0a;
+            padding: 50px;
+            border-radius: 20px;
+            border: 2px solid #333;
+            margin-bottom: 60px;
+            box-shadow: 0 10px 50px rgba(0,0,0,0.5);
+        }
+
+        .performance-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin: 60px 0;
+        }
+
+        .performance-card {
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            padding: 50px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 15px 50px rgba(255, 215, 0, 0.3);
+        }
+
+        .performance-card.sp500 {
+            background: linear-gradient(135deg, #555 0%, #333 100%);
+        }
+
+        .performance-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: #000;
+            font-weight: 600;
+        }
+
+        .performance-card.sp500 h3 {
+            color: #fff;
+        }
+
+        .performance-card .big-number {
+            font-size: 5rem;
+            font-weight: 800;
+            color: #000;
+            margin-bottom: 10px;
+            line-height: 1;
+        }
+
+        .performance-card.sp500 .big-number {
+            color: #fff;
+        }
+
+        .performance-card .label {
+            font-size: 1.2rem;
+            color: #000;
+            opacity: 0.9;
+        }
+
+        .performance-card.sp500 .label {
+            color: #fff;
+        }
+
+        .advantage-banner {
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            margin: 60px 0;
+            box-shadow: 0 20px 60px rgba(255, 215, 0, 0.4);
+        }
+
+        .advantage-banner h3 {
+            font-size: 2.5rem;
+            color: #000;
+            font-weight: 800;
+            margin-bottom: 15px;
+        }
+
+        .advantage-banner p {
+            font-size: 1.3rem;
+            color: #000;
+            opacity: 0.9;
+        }
+
+        .strategy-section {
+            padding: 80px 0;
+            background: #000;
+        }
+
+        .strategy-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .strategy-card {
+            background: #0a0a0a;
+            padding: 40px 35px;
+            border-radius: 15px;
+            border: 2px solid #222;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .strategy-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #FFD700, #FFA500);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .strategy-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .strategy-card:hover {
+            border-color: #FFD700;
+            box-shadow: 0 15px 40px rgba(255, 215, 0, 0.2);
+            transform: translateY(-5px);
+        }
+
+        .strategy-card h4 {
+            color: #FFD700;
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .strategy-card p {
+            color: #aaa;
+            font-size: 1.05rem;
+            line-height: 1.7;
+        }
+
+        .thesis-section {
+            padding: 80px 0;
+            background: #000;
+        }
+
+        .thesis-content {
+            background: #0a0a0a;
+            padding: 60px;
+            border-radius: 20px;
+            border: 2px solid #FFD700;
+            box-shadow: 0 10px 50px rgba(255, 215, 0, 0.2);
+        }
+
+        .thesis-content p {
+            font-size: 1.25rem;
+            color: #ccc;
+            line-height: 1.9;
+            margin-bottom: 25px;
+        }
+
+        .cta-section {
+            text-align: center;
+            padding: 120px 0;
+            background: linear-gradient(180deg, #000 0%, #0a0a0a 100%);
+            position: relative;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #FFD700, transparent);
+        }
+
+        .cta-section h2 {
+            font-size: 3rem;
+            color: #FFD700;
+            margin-bottom: 25px;
+            font-weight: 700;
+        }
+
+        .cta-section p {
+            font-size: 1.3rem;
+            color: #aaa;
+            margin-bottom: 50px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.7;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            color: #000;
+            padding: 22px 50px;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.4);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(255, 215, 0, 0.6);
+        }
+
+        .exclusivity-text {
+            font-size: 0.95rem;
+            color: #666;
+            margin-top: 30px;
+            font-style: italic;
+        }
+
+        footer {
+            text-align: center;
+            padding: 50px 0;
+            color: #555;
+            font-size: 0.95rem;
+            border-top: 1px solid #222;
+            background: #000;
+        }
+
+        @media (max-width: 1024px) {
+            .stats-row {
+                grid-template-columns: 1fr;
+                gap: 25px;
+            }
+
+            .performance-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .strategy-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .stat-number {
+                font-size: 2.5rem;
+            }
+
+            .performance-card .big-number {
+                font-size: 3.5rem;
+            }
+
+            .chart-container {
+                padding: 30px 20px;
+            }
+
+            .thesis-content {
+                padding: 40px 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo-container">
+                <div class="logo-glow"></div>
+                <div class="logo-border">
+                    <div class="logo-inner">
+                        <div class="logo-v">V</div>
+                    </div>
+                </div>
+            </div>
+            <div class="logo-text">VIGIL</div>
+            <div class="tagline">Stay Paranoid. Stay Profitable.</div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <div class="limited-badge">⚡ Limited Availability - Exclusive Access</div>
+            <h1>Superior Returns Through <span class="highlight">Disciplined Vigilance</span></h1>
+            <p>Elite investment performance for discerning families and individuals seeking tax-efficient wealth multiplication through equities and commodities.</p>
+        </div>
+    </section>
+
+    <section class="comparison-section">
+        <div class="container">
+            <h2 class="section-title">Proven Track Record</h2>
+            <p class="section-subtitle">2-Year Performance Comparison (2024-2026)</p>
+
+            <div class="stats-row">
+                <div class="stat-card">
+                    <div class="stat-number">37.85%</div>
+                    <div class="stat-label">Vigil Average CAGR</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">21.5%</div>
+                    <div class="stat-label">S&P 500 CAGR</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">+16.35%</div>
+                    <div class="stat-label">Annual Alpha</div>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <canvas id="cagrChart" style="max-height: 400px;"></canvas>
+            </div>
+
+            <div class="performance-grid">
+                <div class="performance-card">
+                    <h3>VIGIL 2-YEAR TOTAL RETURN</h3>
+                    <div class="big-number">87.6%</div>
+                    <div class="label">Outperforming Markets</div>
+                </div>
+                <div class="performance-card sp500">
+                    <h3>S&P 500 2-YEAR TOTAL RETURN</h3>
+                    <div class="big-number">49.0%</div>
+                    <div class="label">Market Benchmark</div>
+                </div>
+            </div>
+
+            <div class="advantage-banner">
+                <h3>+38.6% Total Outperformance</h3>
+                <p>Nearly double the market returns with disciplined risk management</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="thesis-section">
+        <div class="container">
+            <h2 class="section-title">Investment Thesis</h2>
+            <div class="thesis-content">
+                <p>Vigil LLC delivers superior risk-adjusted returns through an agile, paranoid lens on market dynamics. We exploit inefficiencies driven by short-term flows and sentiment swings while maintaining disciplined risk controls to preserve capital.</p>
+                
+                <p>Our contrarian approach targets undervalued assets—often beaten-down and shunned by conventional wisdom—presenting the greatest opportunities for outsized gains. This methodology has generated over 100% returns in 24 months.</p>
+                
+                <p><strong>For wealthy families and individuals:</strong> Access professional-grade alpha generation that turns market paranoia into personal prosperity, balancing bold pursuits with protective safeguards—all within tax-efficient equity and commodity structures.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="strategy-section">
+        <div class="container">
+            <h2 class="section-title">Our Strategic Edge</h2>
+            
+            <div class="strategy-grid">
+                <div class="strategy-card">
+                    <h4>Data-Driven Precision</h4>
+                    <p>Real-time monitoring of market flows, liquidity shifts, and sentiment indicators to identify mispriced assets before institutional investors.</p>
+                </div>
+                
+                <div class="strategy-card">
+                    <h4>Contrarian Positioning</h4>
+                    <p>We thrive in distress, entering positions where others fear to tread and exiting with exceptional timing to lock in asymmetric gains.</p>
+                </div>
+                
+                <div class="strategy-card">
+                    <h4>Risk Management</h4>
+                    <p>Disciplined position sizing, stop-loss protocols, and scenario planning ensure capital preservation without sacrificing upside potential.</p>
+                </div>
+                
+                <div class="strategy-card">
+                    <h4>Tax Efficiency</h4>
+                    <p>Strategic deployment across equities and commodities optimized for tax-advantaged wealth accumulation for high-net-worth investors.</p>
+                </div>
+                
+                <div class="strategy-card">
+                    <h4>Flow-Based Trading</h4>
+                    <p>Proven expertise in reading market microstructure and order flow dynamics to capture moves invisible to traditional analysis.</p>
+                </div>
+                
+                <div class="strategy-card">
+                    <h4>Limited Capacity</h4>
+                    <p>Maintaining low AUM ensures agility and execution quality—preserving alpha generation for our exclusive investor base.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section">
+        <div class="container">
+            <h2>Join an Elite Circle</h2>
+            <p>Vigil maintains strict capacity limits to preserve execution quality and alpha generation. We work exclusively with sophisticated investors seeking demonstrable outperformance.</p>
+            
+            <div class="cta-buttons">
+                <a href="mailto:braden.sikes00@gmail.com" class="cta-button">
+                    📧 Braden Sikes<br>
+                    <span style="font-size: 0.9rem; font-weight: 400;">braden.sikes00@gmail.com</span>
+                </a>
+                <a href="mailto:josh.dejung@gmail.com" class="cta-button">
+                    📧 Josh DeJung<br>
+                    <span style="font-size: 0.9rem; font-weight: 400;">josh.dejung@gmail.com</span>
+                </a>
+            </div>
+            
+            <p class="exclusivity-text">Accredited investors only. Minimum investment $250,000.</p>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 Vigil LLC. All rights reserved. | Past performance does not guarantee future results.</p>
+        </div>
+    </footer>
+
+    <script>
+        // CAGR Comparison Chart
+        const ctx = document.getElementById('cagrChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Braden', 'Vigil Average', 'Josh', 'S&P 500'],
+                datasets: [{
+                    label: 'CAGR (%)',
+                    data: [41.80, 37.85, 33.90, 21.50],
+                    backgroundColor: ['#FFD700', '#FFED4E', '#B8860B', '#505050'],
+                    borderColor: ['#FFA500', '#FFD700', '#8B7500', '#333'],
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: '#000',
+                        borderColor: '#FFD700',
+                        borderWidth: 1,
+                        titleColor: '#FFD700',
+                        bodyColor: '#fff',
+                        callbacks: {
+                            label: (context) => `${context.parsed.y}% CAGR`
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 50,
+                        ticks: { 
+                            color: '#999',
+                            font: { size: 14 },
+                            callback: (value) => value + '%'
+                        },
+                        grid: { color: '#222' },
+                        title: { 
+                            display: true, 
+                            text: 'Compound Annual Growth Rate (%)', 
+                            color: '#FFD700',
+                            font: { size: 16, weight: 'bold' }
+                        }
+                    },
+                    x: {
+                        ticks: { 
+                            color: '#999',
+                            font: { size: 14, weight: 'bold' }
+                        },
+                        grid: { display: false }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
